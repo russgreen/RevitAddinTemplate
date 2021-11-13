@@ -1,0 +1,24 @@
+{
+  "$scheme": "https://json.schemastore.org/template.json",
+  "author": "Russ Green",
+  "classifications": [ "Revit" ],
+  "identity": "RevitAddin.01",
+  "name": "Revit Addin",
+  "shortname": "RevitAddin",
+  "sourceName": "RevitAddinTemplate",
+  "defaultName": "RevitAddin",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "preferNameDirectory": true,
+  "symbols": {
+    "Description": {
+      "type": "parameter",
+      "defaultValue": "(insert description)",
+      "replaces": "DescriptionContent",
+      "datatype": "text",
+      "description": "The description for your application goes here"
+    }
+  }
+}
