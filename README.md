@@ -5,6 +5,8 @@
 ![.NET](https://img.shields.io/badge/.NET-4.6.1_--_4.8-blue.svg)
 [![License](http://img.shields.io/:License-MIT-blue.svg)](http://opensource.org/licenses/MIT)
 
+A Visual Studio project template to build a Revit addin in C# that can target multiple versions of Revit using different solution configurations per Revit version.
+
 To install the template locally by running the following command in the project folder
 
 `dotnet new --install .`
