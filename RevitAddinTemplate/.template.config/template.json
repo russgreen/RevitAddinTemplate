@@ -1,12 +1,13 @@
 {
-  "$scheme": "https://json.schemastore.org/template.json",
+  "$schema":  "https://json.schemastore.org/template.json",
   "author": "Russ Green",
   "classifications": [ "Revit" ],
   "identity": "RevitAddin.01",
   "name": "Revit Addin",
-  "shortname": "RevitAddin",
+  "shortName": "RevitAddin",
   "sourceName": "RevitAddinTemplate",
   "defaultName": "RevitAddin",
+  "description": "A new C# Revit addin that targets multiple versions",
   "tags": {
     "language": "C#",
     "type": "project"
@@ -15,10 +16,33 @@
   "symbols": {
     "Description": {
       "type": "parameter",
+      "description": "The description for your application goes here",
+      "datatype": "string",
       "defaultValue": "(insert description)",
-      "replaces": "DescriptionContent",
-      "datatype": "text",
-      "description": "The description for your application goes here"
+      "replaces": "DescriptionContent"
+    },
+    "Author": {
+      "type": "parameter",
+      "description": "The name of the author of the project which determines the NuGet package author, assembly author, company and copyright information.",
+      "datatype": "string",
+      "defaultValue": "(insert project author)",
+      "replaces": "ProjectAuthor"
+    },
+    "ClientId": {
+      "type": "generated",
+      "generator": "guid",
+      "replaces": "E0F9F4AC-C17D-4042-88F6-30B9BEBD058E",
+      "parameters": {
+        "format": "D"
+      }
+    },
+      "CopyrightYear": {
+        "type": "generated",
+        "generator": "now",
+        "parameters": {
+          "format": "yyyy"
+        },
+        "replaces": "CopyrightYear"
+      }
     }
   }
-}

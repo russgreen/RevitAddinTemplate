@@ -4,7 +4,7 @@
     <Configurations>2018;2019;2020;2021;2022</Configurations>
     <Platforms>x64</Platforms>
     <Description>DescriptionContent</Description>
-    <Copyright>Copyright © 2021 Russ Green</Copyright>
+    <Copyright>Copyright © CopyrightYear ProjectAuthor. All rights Reserved</Copyright>
     <Version>0.0.1</Version>
     <NeutralLanguage>en</NeutralLanguage>
     <UseWindowsForms>true</UseWindowsForms>
