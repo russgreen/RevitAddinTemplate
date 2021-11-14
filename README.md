@@ -1,4 +1,4 @@
-# MyRevitAddinTemplate
+# My Revit addin project template
 
 To install the template locally by running the following command in the project folder
 
