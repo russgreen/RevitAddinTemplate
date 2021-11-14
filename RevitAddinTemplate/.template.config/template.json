@@ -1,5 +1,5 @@
 {
-  "$schema":  "https://json.schemastore.org/template.json",
+  "$schema": "https://json.schemastore.org/template.json",
   "author": "Russ Green",
   "classifications": [ "Revit" ],
   "identity": "RevitAddin.01",
@@ -36,13 +36,19 @@
         "format": "D"
       }
     },
-      "CopyrightYear": {
-        "type": "generated",
-        "generator": "now",
-        "parameters": {
-          "format": "yyyy"
-        },
-        "replaces": "CopyrightYear"
-      }
+    "CopyrightYear": {
+      "type": "generated",
+      "generator": "now",
+      "parameters": {
+        "format": "yyyy"
+      },
+      "replaces": "CopyrightYear"
+    },
+    "CreateNewRibbonTab": {
+      "type": "parameter",
+      "description": "Create a new Ribbon tab in Revit for this addin or use the default Addins tab",
+      "datatype": "bool",
+      "defaultValue": "true"
     }
   }
+}

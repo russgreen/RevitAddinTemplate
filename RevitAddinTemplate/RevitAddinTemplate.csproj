@@ -107,8 +107,7 @@
     -->
 	
   <ItemGroup>
-    <EmbeddedResource Include="Resources\code-small.png" />
-    <EmbeddedResource Include="Resources\code.png" />
+    <EmbeddedResource Include="Resources\RevitAddinTemplate_Button.png" />
   </ItemGroup>
 
 

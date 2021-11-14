@@ -17,12 +17,12 @@ namespace RevitAddinTemplate
         public static UIApplication CachedUiApp;
 
         public static Autodesk.Revit.DB.Document RevitDocument;
-
-        private readonly string _tabName = "Revit Addin Template";
-
+#if (CreateNewRibbonTab)
+        private readonly string _tabName = "RevitAddinTemplate";
+#endif
         public Result OnStartup(UIControlledApplication application)
         {
-            //start the application center monitoring - setup app on app center and uncomment thos code
+            //start the application center monitoring - setup app on https://appcenter.ms/ and uncomment this code and the references to Microsoft.AppCenter.Analytics and Microsoft.AppCenter.Crashes in .csproj
             //AppCenter.LogLevel = LogLevel.Verbose;
             //System.Windows.Forms.Application.ThreadException += (sender, args) =>
             //{
@@ -50,7 +50,7 @@ namespace RevitAddinTemplate
         }
 
 
-        #region Event Handling
+#region Event Handling
         private void OnIdling(object sender, IdlingEventArgs e)
         {
         }
@@ -62,25 +62,30 @@ namespace RevitAddinTemplate
         private void ApplicationClosing(object sender, ApplicationClosingEventArgs e)
         {
         }
-        #endregion
+#endregion
 
-        #region Ribbon Panel
+#region Ribbon Panel
 
         private RibbonPanel RibbonPanel(UIControlledApplication application)
         {
+
+#if (CreateNewRibbonTab)
             try
             {
                 CachedUiCtrApp.CreateRibbonTab(_tabName);
             }
             catch { }
 
-            RibbonPanel panel = CachedUiCtrApp.CreateRibbonPanel(_tabName, "RevitAddin_Panel");
-            panel.Title = "Revit addin";
+            RibbonPanel panel = CachedUiCtrApp.CreateRibbonPanel(_tabName, "RevitAddinTemplate_Panel");
+#else
+            RibbonPanel panel = CachedUiCtrApp.CreateRibbonPanel("RevitAddinTemplate_Panel");
+#endif
+            panel.Title = "RevitAddinTemplate";
 
             PushButtonData pbData = new PushButtonData("Command", "Command", Assembly.GetExecutingAssembly().Location, "RevitAddinTemplate.Command");
             PushButton pb = (PushButton)panel.AddItem(pbData);
-            pb.ToolTip = "Tooltip text";
-            pb.LargeImage = PngImageSource("RevitAddinTemplate.Resources.code-small.png");
+            pb.ToolTip = "Execute the RevitAddinTemplate command";
+            pb.LargeImage = PngImageSource("RevitAddinTemplate.Resources.RevitAddinTemplate_Button.png");
 
             return panel;
         }
@@ -100,6 +105,6 @@ namespace RevitAddinTemplate
 
             return imageSource;
         }
-        #endregion
+#endregion
     }
 }

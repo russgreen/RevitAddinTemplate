@@ -19,7 +19,7 @@ namespace RevitAddinTemplate
 #if PREFORGETYPEID
 #else
 #endif
-            TaskDialog.Show("Revit addin", "Testing the command is being called");
+            TaskDialog.Show("RevitAddinTemplate", "Testing the command is being called");
 
             UIApplication uiapp = commandData.Application;
             UIDocument uidoc = uiapp.ActiveUIDocument;
