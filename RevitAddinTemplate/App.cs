@@ -1,8 +1,11 @@
 ﻿using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Events;
-//using Microsoft.AppCenter;
-//using Microsoft.AppCenter.Analytics;
-//using Microsoft.AppCenter.Crashes;
+#if (UseAnalytics)
+//uncomment references to Microsoft.AppCenter.Analytics and Microsoft.AppCenter.Crashes in .csproj
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
+#endif
 using System.Reflection;
 using System.Windows.Media.Imaging;
 
@@ -13,24 +16,30 @@ namespace RevitAddinTemplate
         // get the absolute path of this assembly
         public static readonly string ExecutingAssemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
 
+        // class instance
+        public static App ThisApp;
+
         public static UIControlledApplication CachedUiCtrApp;
         public static UIApplication CachedUiApp;
-
         public static Autodesk.Revit.DB.Document RevitDocument;
+
 #if (CreateNewRibbonTab)
         private readonly string _tabName = "RevitAddinTemplate";
 #endif
         public Result OnStartup(UIControlledApplication application)
         {
-            //start the application center monitoring - setup app on https://appcenter.ms/ and uncomment this code and the references to Microsoft.AppCenter.Analytics and Microsoft.AppCenter.Crashes in .csproj
-            //AppCenter.LogLevel = LogLevel.Verbose;
-            //System.Windows.Forms.Application.ThreadException += (sender, args) =>
-            //{
-            //    Crashes.TrackError(args.Exception);
-            //};
+#if (UseAnalytics)
+            //start the application center monitoring - setup app on https://appcenter.ms/
+            AppCenter.LogLevel = LogLevel.Verbose;
+            System.Windows.Forms.Application.ThreadException += (sender, args) =>
+            {
+                Crashes.TrackError(args.Exception);
+            };
 
-            //AppCenter.Start("<APPGUID>", typeof(Crashes));
+            AppCenter.Start("<APPGUID>", typeof(Crashes));
 
+#endif
+            ThisApp = this; 
             CachedUiCtrApp = application;
 
             var panel = RibbonPanel(application);
@@ -42,15 +51,12 @@ namespace RevitAddinTemplate
             return Result.Succeeded;
         }
 
-
-
         public Result OnShutdown(UIControlledApplication application)
         {
             return Result.Succeeded;
         }
 
-
-#region Event Handling
+        #region Event Handling
         private void OnIdling(object sender, IdlingEventArgs e)
         {
         }
@@ -82,10 +88,14 @@ namespace RevitAddinTemplate
 #endif
             panel.Title = "RevitAddinTemplate";
 
-            PushButtonData pbData = new PushButtonData("Command", "Command", Assembly.GetExecutingAssembly().Location, "RevitAddinTemplate.Command");
-            PushButton pb = (PushButton)panel.AddItem(pbData);
-            pb.ToolTip = "Execute the RevitAddinTemplate command";
-            pb.LargeImage = PngImageSource("RevitAddinTemplate.Resources.RevitAddinTemplate_Button.png");
+            PushButton button = (PushButton)panel.AddItem(
+                new PushButtonData(
+                    "Command", 
+                    "Command", 
+                    Assembly.GetExecutingAssembly().Location, 
+                    "RevitAddinTemplate.Command"));
+            button.ToolTip = "Execute the RevitAddinTemplate command";
+            button.LargeImage = PngImageSource("RevitAddinTemplate.Resources.RevitAddinTemplate_Button.png");
 
             return panel;
         }

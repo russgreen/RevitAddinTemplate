@@ -2,8 +2,7 @@
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using Autodesk.Revit.UI.Selection;
-using System.Diagnostics;
+using System;
 
 namespace RevitAddinTemplate
 {
@@ -12,6 +11,15 @@ namespace RevitAddinTemplate
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
+            if (commandData.Application.ActiveUIDocument.Document is null)
+            {
+                throw new ArgumentException("activedoc");
+            }
+            else
+            {
+                App.RevitDocument = commandData.Application.ActiveUIDocument.Document;
+            }
+
 #if REVIT2021
 #else
 #endif
@@ -19,41 +27,20 @@ namespace RevitAddinTemplate
 #if PREFORGETYPEID
 #else
 #endif
-            TaskDialog.Show("RevitAddinTemplate", "Testing the command is being called");
 
-            UIApplication uiapp = commandData.Application;
-            UIDocument uidoc = uiapp.ActiveUIDocument;
-            Application app = uiapp.Application;
-            Document doc = uidoc.Document;
-
-            // Access current selection
-
-            Selection sel = uidoc.Selection;
-
-            // Retrieve elements from database
-
-            FilteredElementCollector col
-              = new FilteredElementCollector(doc)
-                .WhereElementIsNotElementType()
-                .OfCategory(BuiltInCategory.INVALID)
-                .OfClass(typeof(Wall));
-
-            // Filtered element collector is iterable
-
-            foreach (Element e in col)
-            {
-                Debug.Print(e.Name);
-            }
-
-            // Modify document within a transaction
-
-            using (Transaction tx = new Transaction(doc))
-            {
-                tx.Start("Transaction Name");
-                tx.Commit();
-            }
+#if (UseWPF)
+            var mainWindowView = new Views.MainView();
+            mainWindowView.ShowDialog();            
+#endif
+#if (!UseWPF)
+            //TODO: Remove reference to the Microsoft.Toolkit.MVVM package
+            var form = new MainForm(commandData);
+            form.ShowDialog(new WindowHandle(commandData.Application.MainWindowHandle));
+#endif
 
             return Result.Succeeded;
         }
+
+
     }
 }

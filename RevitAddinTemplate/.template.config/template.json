@@ -49,6 +49,41 @@
       "description": "Create a new Ribbon tab in Revit for this addin or use the default Addins tab",
       "datatype": "bool",
       "defaultValue": "true"
+    },
+    "UseAnalytics": {
+      "type": "parameter",
+      "description": "Use Microsoft App Center Analytics",
+      "datatype": "bool",
+      "defaultValue": "false"
+    },
+    "UseWPF": {
+      "type": "parameter",
+      "description": "Use WPF or Winforms",
+      "datatype": "bool",
+      "defaultValue": "false"
     }
-  }
+  },
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "condition": "(!UseWPF)",
+          "exclude": [
+            "Views/MainView.xaml",
+            "Views/MainView.xaml.cs",
+            "ViewModels/MainViewModel.cs"
+          ]
+        },
+        {
+          "condition": "(UseWPF)",
+          "exclude": [
+            "WindowHandle.cs",
+            "MainForm.cs",
+            "MainForm.Designer.cs",
+            "MainForm.resx"
+          ]
+        }
+      ]
+    }
+    ]
 }

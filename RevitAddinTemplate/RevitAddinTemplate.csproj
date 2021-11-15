@@ -7,8 +7,8 @@
     <Copyright>Copyright © CopyrightYear ProjectAuthor. All rights Reserved</Copyright>
     <Version>0.0.1</Version>
     <NeutralLanguage>en</NeutralLanguage>
-    <UseWindowsForms>true</UseWindowsForms>
-	<!--<UseWPF>true</UseWPF>-->
+	<UseWPF>true</UseWPF>
+	<UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == '2018'">
@@ -99,31 +99,21 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
 
-	<!-- 
+  <!--
   <ItemGroup>
     <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.4.0" />
     <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.4.0" />
   </ItemGroup>
-    -->
+  -->
 	
   <ItemGroup>
     <EmbeddedResource Include="Resources\RevitAddinTemplate_Button.png" />
   </ItemGroup>
-
-
-
-	<!--<ItemGroup>
-		<PackageReference Include="Autodesk.Revit.SDK" Version="2018.*" Condition=" '$(Configuration)' == '2018' " PrivateAssets="All" />
-		<PackageReference Include="Autodesk.Revit.SDK" Version="2019.*" Condition=" '$(Configuration)' == '2019' " PrivateAssets="All" />
-		<PackageReference Include="Autodesk.Revit.SDK" Version="2020.*" Condition=" '$(Configuration)' == '2020' " PrivateAssets="All" />
-		<PackageReference Include="Autodesk.Revit.SDK" Version="2022.*" Condition=" '$(Configuration)' == '2022' " PrivateAssets="All" />
-	</ItemGroup>
-
-	<Target Name="PreventRevitSDKCopyLocal" AfterTargets="ResolveReferences">
-		<ItemGroup>
-			<ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)" Condition="'%(ReferenceCopyLocalPaths.NuGetPackageId)' == 'Autodesk.Revit.SDK'" />
-		</ItemGroup>
-	</Target>-->
+	
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.1.1" />
+    <PackageReference Include="PropertyChanged.Fody" Version="3.4.0" />
+  </ItemGroup>
 
 	<ItemGroup>
 		<None Update="RevitAddinTemplate.addin">
