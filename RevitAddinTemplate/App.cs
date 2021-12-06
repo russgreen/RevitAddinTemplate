@@ -1,4 +1,5 @@
-﻿using Autodesk.Revit.UI;
+﻿using Autodesk.Revit.ApplicationServices;
+using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Events;
 #if (UseAnalytics)
 //uncomment references to Microsoft.AppCenter.Analytics and Microsoft.AppCenter.Crashes in .csproj
@@ -21,8 +22,10 @@ namespace RevitAddinTemplate
 
         public static UIControlledApplication CachedUiCtrApp;
         public static UIApplication CachedUiApp;
+        public static ControlledApplication CtrApp;
         public static Autodesk.Revit.DB.Document RevitDocument;
 
+        private AppDocEvents _appEvents;
 #if (CreateNewRibbonTab)
         private readonly string _tabName = "RevitAddinTemplate";
 #endif
@@ -41,33 +44,34 @@ namespace RevitAddinTemplate
 #endif
             ThisApp = this; 
             CachedUiCtrApp = application;
+            CtrApp = application.ControlledApplication;
 
             var panel = RibbonPanel(application);
 
-            //application.Idling += new EventHandler<IdlingEventArgs>(OnIdling);
-            //application.ViewActivated += new EventHandler<ViewActivatedEventArgs>(OnViewActivated);
-            //application.ApplicationClosing += new EventHandler<ApplicationClosingEventArgs>(ApplicationClosing);
+            AddAppDocEvents();
 
             return Result.Succeeded;
         }
 
         public Result OnShutdown(UIControlledApplication application)
         {
+            RemoveAppDocEvents();
+
             return Result.Succeeded;
         }
 
         #region Event Handling
-        private void OnIdling(object sender, IdlingEventArgs e)
+        private void AddAppDocEvents()
         {
+            _appEvents = new AppDocEvents();
+            _appEvents.EnableEvents();
+        }
+        private void RemoveAppDocEvents()
+        {
+            _appEvents.DisableEvents();
         }
 
-        private void OnViewActivated(object sender, ViewActivatedEventArgs e)
-        {
-        }
 
-        private void ApplicationClosing(object sender, ApplicationClosingEventArgs e)
-        {
-        }
 #endregion
 
 #region Ribbon Panel

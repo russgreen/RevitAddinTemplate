@@ -13,13 +13,13 @@ namespace RevitAddinTemplate
             Debug.Assert(IntPtr.Zero != h, "expected non-null window handle");
             _hwnd = h;
         }
-
-        public IntPtr Handle
+        public WindowHandle()
         {
-            get
-            {
-                return _hwnd;
-            }
+            Handle = RevitMainWindowHandle;
         }
+
+        public static IntPtr RevitMainWindowHandle { get; set; }
+
+        public IntPtr Handle { get; }
     }
 }

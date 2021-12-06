@@ -34,7 +34,7 @@ namespace RevitAddinTemplate
 #endif
 #if (!UseWPF)
             //TODO: Remove reference to the Microsoft.Toolkit.MVVM package
-            var form = new MainForm(commandData);
+            var form = new Forms.MainForm(commandData);
             form.ShowDialog(new WindowHandle(commandData.Application.MainWindowHandle));
 #endif
 

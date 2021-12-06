@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Media;
 
-namespace RevitAddinTemplate
+namespace RevitAddinTemplate.Forms
 {
     public partial class MainForm : Form
     {

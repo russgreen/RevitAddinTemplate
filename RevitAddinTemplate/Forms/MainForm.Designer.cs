@@ -1,4 +1,4 @@
-﻿namespace RevitAddinTemplate
+﻿namespace RevitAddinTemplate.Forms
 {
     partial class MainForm
     {
