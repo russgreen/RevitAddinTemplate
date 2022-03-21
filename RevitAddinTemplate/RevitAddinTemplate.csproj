@@ -172,7 +172,7 @@
 	</UsingTask>
 
 	<!-- Clean up debug manifest -->
-	<Target Name="CreateAddinManifest" AfterTargets="AfterClean">
+	<Target Name="CleanupAddinManifest" AfterTargets="AfterClean">
         <Delete Files="$(AppData)\Autodesk\REVIT\Addins\$(Configuration)\RevitAddinTemplate.addin" />		
 	</Target>
 
