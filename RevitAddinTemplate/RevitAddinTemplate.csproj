@@ -55,8 +55,8 @@
     <DebugEngines>{351668CC-8477-4fbf-BFE3-5F1006E4DB1F}</DebugEngines>
 
     <!-- Define handy symbols to use in the code in order to accommodate different Revit versions,
-        e.g. by wrapping legacy / deprecated API calls with #if REVIT2014 | REVIT2015 -->
-    <DefineConstants>DEBUG;REVIT$(Configuration)</DefineConstants>
+        e.g. by wrapping legacy / deprecated API calls with #if REVIT2014 | REVIT2015 
+    <DefineConstants>DEBUG;REVIT$(Configuration)</DefineConstants>-->
     <PreprocessorDefinitions>$(DefineConstants)</PreprocessorDefinitions>
 
     <!-- Multiple targets can cause obj folder locking by concurrent builds -->
@@ -170,5 +170,10 @@
 			</Code>
 		</Task>
 	</UsingTask>
+
+	<!-- Clean up debug manifest -->
+	<Target Name="CreateAddinManifest" AfterTargets="AfterClean">
+        <Delete Files="$(AppData)\Autodesk\REVIT\Addins\$(Configuration)\RevitAddinTemplate.addin" />		
+	</Target>
 
 </Project>
