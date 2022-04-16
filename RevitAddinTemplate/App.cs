@@ -96,8 +96,8 @@ namespace RevitAddinTemplate
                 new PushButtonData(
                     "Command", 
                     "Command", 
-                    Assembly.GetExecutingAssembly().Location, 
-                    "RevitAddinTemplate.Command"));
+                    Assembly.GetExecutingAssembly().Location,
+                    $"{nameof(RevitAddinTemplate)}.{nameof(RevitAddinTemplate.Command)}"));
             button.ToolTip = "Execute the RevitAddinTemplate command";
             button.LargeImage = PngImageSource("RevitAddinTemplate.Resources.RevitAddinTemplate_Button.png");
 
