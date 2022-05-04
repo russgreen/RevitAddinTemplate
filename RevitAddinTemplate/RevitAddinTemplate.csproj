@@ -1,120 +1,125 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
-  <PropertyGroup>
-    <Configurations>2018;2019;2020;2021;2022</Configurations>
-    <Platforms>x64</Platforms>
-    <Description>DescriptionContent</Description>
-    <Copyright>Copyright © CopyrightYear ProjectAuthor. All rights Reserved</Copyright>
-    <Version>0.0.1</Version>
-	<LangVersion>10</LangVersion>
-    <NeutralLanguage>en</NeutralLanguage>
-	<UseWPF>true</UseWPF>
-	<UseWindowsForms>true</UseWindowsForms>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)' == '2018'">
-    <TargetFramework>net461</TargetFramework>
-    <Optimize>false</Optimize>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == '2019'">
-    <TargetFramework>net47</TargetFramework>
-    <Optimize>false</Optimize>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == '2020'">
-    <TargetFramework>net471</TargetFramework>
-    <Optimize>false</Optimize>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == '2021'">
-    <TargetFramework>net48</TargetFramework>
-    <Optimize>false</Optimize>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == '2022'">
-    <TargetFramework>net48</TargetFramework>
-    <Optimize>false</Optimize>
-  </PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)' &lt;= '2021'">
-		<DefineConstants>DEBUG;REVIT$(Configuration);PREFORGETYPEID</DefineConstants>
+	<PropertyGroup>
+		<Configurations>Debug R19;Debug R20;Debug R21;Debug R22;Debug R23</Configurations>
+		<Configurations>$(Configurations);Release R19;Release R20;Release R21;Release R22;Release R23</Configurations>
+		<Platforms>x64</Platforms>
+		<Description>DescriptionContent</Description>
+		<Copyright>Copyright © CopyrightYear ProjectAuthor. All rights Reserved</Copyright>
+		<Version>0.0.1</Version>
+		<LangVersion>10</LangVersion>
+		<NeutralLanguage>en</NeutralLanguage>
+		<UseWPF>true</UseWPF>
+		<UseWindowsForms>true</UseWindowsForms>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)' &gt;= '2022'">
-		<DefineConstants>DEBUG;REVIT$(Configuration)</DefineConstants>
+	<PropertyGroup Condition="$(Configuration.Contains('Debug'))">
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>full</DebugType>
+	</PropertyGroup>
+	<PropertyGroup Condition="$(Configuration.Contains('Release'))">
+		<Optimize>true</Optimize>
+		<DebugType>none</DebugType>
 	</PropertyGroup>
 
-  <PropertyGroup>
-    <Path_DLL_API>..\..\RevitAPI\</Path_DLL_API>
-  </PropertyGroup>
+	<PropertyGroup Condition="$(Configuration.Contains('R19'))">
+		<TargetFramework>net47</TargetFramework>
+		<RevitVersion>2019</RevitVersion>
+		<DefineConstants>$(DefineConstants);REVIT2019;PREFORGETYPEID</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="$(Configuration.Contains('R20'))">
+		<TargetFramework>net471</TargetFramework>
+		<RevitVersion>2020</RevitVersion>
+		<DefineConstants>$(DefineConstants);REVIT2020;PREFORGETYPEID</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="$(Configuration.Contains('R21'))">
+		<TargetFramework>net48</TargetFramework>
+		<RevitVersion>2021</RevitVersion>
+		<DefineConstants>$(DefineConstants);REVIT2021;PREFORGETYPEID</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="$(Configuration.Contains('R22'))">
+		<TargetFramework>net48</TargetFramework>
+		<RevitVersion>2022</RevitVersion>
+		<DefineConstants>$(DefineConstants);REVIT2022</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="$(Configuration.Contains('R23'))">
+		<RevitVersion>2023</RevitVersion>
+		<DefineConstants>$(DefineConstants);REVIT2023</DefineConstants>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <!-- Forcibly set platform to 'x64' and ignore architecture-related problems -->
-    <PlatformTarget>x64</PlatformTarget>
-    <Platforms>x64</Platforms>
-    <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+	<PropertyGroup>
+		<Path_DLL_API>..\..\RevitAPI\</Path_DLL_API>
+	</PropertyGroup>
 
-    <!-- Force the project to use the legacy debugger engine -->
-    <DebugEngines>{351668CC-8477-4fbf-BFE3-5F1006E4DB1F}</DebugEngines>
+	<PropertyGroup>
+		<!-- Forcibly set platform to 'x64' and ignore architecture-related problems 
+		<PlatformTarget>x64</PlatformTarget>
+		<Platforms>x64</Platforms>
+		<ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>-->
 
-    <!-- Define handy symbols to use in the code in order to accommodate different Revit versions,
-        e.g. by wrapping legacy / deprecated API calls with #if REVIT2014 | REVIT2015 
-    <DefineConstants>DEBUG;REVIT$(Configuration)</DefineConstants>-->
-    <PreprocessorDefinitions>$(DefineConstants)</PreprocessorDefinitions>
+		<!-- Force the project to use the legacy debugger engine 
+		<DebugEngines>{351668CC-8477-4fbf-BFE3-5F1006E4DB1F}</DebugEngines> -->
 
-    <!-- Multiple targets can cause obj folder locking by concurrent builds -->
-    <BuildInParallel>false</BuildInParallel>
+		<!-- Define handy symbols to use in the code in order to accommodate different Revit versions,
+        e.g. by wrapping legacy / deprecated API calls with #if REVIT2014 | REVIT2015 -->
+		<PreprocessorDefinitions>$(DefineConstants)</PreprocessorDefinitions>
 
-    <!-- Override 'OutputPath'  -->
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <OutputPath>bin\$(Configuration)</OutputPath>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-  </PropertyGroup>
+		<!-- Multiple targets can cause obj folder locking by concurrent builds -->
+		<BuildInParallel>false</BuildInParallel>
 
-  <ItemGroup>
-    <Reference Include="AdWindows">
-      <HintPath>$(Path_DLL_API)\$(Configuration)\AdWindows.dll</HintPath>
-      <EmbedInteropTypes>false</EmbedInteropTypes>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="RevitAPI">
-      <HintPath>$(Path_DLL_API)\$(Configuration)\RevitAPI.dll</HintPath>
-      <EmbedInteropTypes>false</EmbedInteropTypes>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="RevitAPIUI">
-      <HintPath>$(Path_DLL_API)\$(Configuration)\RevitAPIUI.dll</HintPath>
-      <EmbedInteropTypes>false</EmbedInteropTypes>
-      <Private>false</Private>
-    </Reference>
-    <!-- 
+		<!-- Override 'OutputPath'  -->
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<!-- <OutputPath>bin\$(Configuration)</OutputPath> -->
+		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Reference Include="AdWindows">
+			<HintPath>$(Path_DLL_API)\$(RevitVersion)\AdWindows.dll</HintPath>
+			<EmbedInteropTypes>false</EmbedInteropTypes>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="RevitAPI">
+			<HintPath>$(Path_DLL_API)\$(RevitVersion)\RevitAPI.dll</HintPath>
+			<EmbedInteropTypes>false</EmbedInteropTypes>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="RevitAPIUI">
+			<HintPath>$(Path_DLL_API)\$(RevitVersion)\RevitAPIUI.dll</HintPath>
+			<EmbedInteropTypes>false</EmbedInteropTypes>
+			<Private>false</Private>
+		</Reference>
+		<!-- 
     <Reference Include="UIFramework">
-      <HintPath>$(Path_DLL_API)\$(Configuration)\UIFramework.dll</HintPath>
+      <HintPath>$(Path_DLL_API)\$(RevitVersion)\UIFramework.dll</HintPath>
       <EmbedInteropTypes>false</EmbedInteropTypes>
       <Private>false</Private>
     </Reference>
     -->
-  </ItemGroup>
+	</ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System.Printing" />
-    <Reference Include="WindowsBase" />
-  </ItemGroup>
+	<ItemGroup>
+		<Reference Include="PresentationCore" />
+		<Reference Include="PresentationFramework" />
+		<Reference Include="System.Printing" />
+		<Reference Include="WindowsBase" />
+	</ItemGroup>
 
-  <!--
+	<!--
   <ItemGroup>
     <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.4.0" />
     <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.4.0" />
   </ItemGroup>
   -->
-	
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\RevitAddinTemplate_Button.png" />
-  </ItemGroup>
-	
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.1.1" />
-    <PackageReference Include="PropertyChanged.Fody" Version="3.4.0" />
-  </ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Resources\RevitAddinTemplate_Button.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.1.1" />
+		<PackageReference Include="PropertyChanged.Fody" Version="3.4.0" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<None Update="RevitAddinTemplate.addin">
@@ -125,11 +130,16 @@
 	<!-- Build debug manifest at build time -->
 	<Target Name="CreateAddinManifest" AfterTargets="AfterBuild">
 		<ItemGroup>
-			<AddinManifest Include="$(AppData)\Autodesk\REVIT\Addins\$(Configuration)\RevitAddinTemplate.addin" />
+			<AddinManifest Include="$(AppData)\Autodesk\REVIT\Addins\$(RevitVersion)\RevitAddinTemplate.addin" />
 		</ItemGroup>
 		<ReplaceFileText InputFilename="RevitAddinTemplate.addin" OutputFilename="@(AddinManifest)" MatchExpression="Assembly&gt;(.*?)&lt;" ReplacementText="Assembly&gt;$(TargetDir)$(AssemblyName).dll&lt;" />
 		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;VendorId&gt;(.*?)&lt;" ReplacementText="&lt;VendorId&gt;$(PackageId)&lt;" />
 		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;FullClassName&gt;(.*?)&lt;" ReplacementText="&lt;FullClassName&gt;$(RootNamespace).App&lt;" />
+	</Target>
+	
+	<!-- Clean up debug manifest -->
+	<Target Name="CleanupAddinManifest" AfterTargets="AfterClean">
+		<Delete Files="$(AppData)\Autodesk\REVIT\Addins\$(RevitVersion)\RevitAddinTemplate.addin" />
 	</Target>
 
 	<UsingTask Condition="'$(MSBuildRuntimeType)' == 'Full'" TaskName="ReplaceFileText" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
@@ -171,9 +181,6 @@
 		</Task>
 	</UsingTask>
 
-	<!-- Clean up debug manifest -->
-	<Target Name="CleanupAddinManifest" AfterTargets="AfterClean">
-        <Delete Files="$(AppData)\Autodesk\REVIT\Addins\$(Configuration)\RevitAddinTemplate.addin" />		
-	</Target>
+
 
 </Project>
