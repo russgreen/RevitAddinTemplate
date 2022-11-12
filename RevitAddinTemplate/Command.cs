@@ -20,7 +20,15 @@ namespace RevitAddinTemplate
                 App.RevitDocument = commandData.Application.ActiveUIDocument.Document;
             }
 
+#if REVIT2020 || REVIT2021 || REVIT2022
+#else
+#endif
+
 #if REVIT2021
+#else
+#endif
+
+#if REVIT2022_OR_GREATER
 #else
 #endif
 
