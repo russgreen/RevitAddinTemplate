@@ -1,27 +1,30 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Logging;
 using System.Reflection;
 using System.Windows.Input;
 
 namespace RevitAddinTemplate.ViewModels
 {
-    internal class MainViewModel : ObservableValidator 
+    internal partial class MainViewModel : ObservableValidator 
     {
         public string WindowTitle { get; private set; }
 
-        public bool IsCommandEnabled { get; private set; } = true;
+        [ObservableProperty]
+        private bool _isCommandEnabled = true;
 
-        public ICommand RunCommand { get; }
+        private readonly ILogger<MainViewModel> _logger = Host.GetService<ILogger<MainViewModel>>();
 
         public MainViewModel()
         {
             var informationVersion = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
             WindowTitle = $"RevitAddinTemplate {informationVersion} ({App.RevitDocument.Title})";
 
-            RunCommand = new RelayCommand(RunCommandMethod);
+            _logger.LogDebug("MainViewModel");
         }
 
-        private void RunCommandMethod()
+        [RelayCommand]
+        private void Run()
         {
             //DO STUFF HERE
             IsCommandEnabled = false;

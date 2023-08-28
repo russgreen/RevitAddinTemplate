@@ -2,6 +2,9 @@
 using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Events;
+#if(UseDI)
+using Microsoft.Extensions.Logging;
+#endif
 using System;
 
 namespace RevitAddinTemplate
@@ -9,9 +12,18 @@ namespace RevitAddinTemplate
     internal class AppDocEvents
     {
 
+#if(UseDI)
+        private readonly ILogger<AppDocEvents> _logger;
+
+        public AppDocEvents(ILogger<AppDocEvents> logger)
+        {
+            _logger = logger;
+        }
+#else
         public AppDocEvents()
         {
         }
+#endif
 
         public void EnableEvents()
         {
@@ -39,30 +51,49 @@ namespace RevitAddinTemplate
 
         private void OnDocumentSavedAs(object sender, DocumentSavedAsEventArgs e)
         {
+#if (UseDI)
+            _logger.LogDebug("DocumentSavedAs");
+#endif
         }
 
         private void OnDocumentSaved(object sender, DocumentSavedEventArgs e)
         {
+#if (UseDI)
+            _logger.LogDebug("DocumentSaved");
+#endif
         }
 
         private void OnDocumentOpened(object sender, DocumentOpenedEventArgs e)
         {
+#if (UseDI)
+            _logger.LogDebug("DocumentOpened");
+#endif
         }
 
         private void OnDocumentClosed(object sender, DocumentClosedEventArgs e)
         {
+#if (UseDI)
+            _logger.LogDebug("DocumentClosed");
+#endif
         }
 
         private void OnIdling(object sender, IdlingEventArgs e)
         {
+
         }
 
         private void OnViewActivated(object sender, ViewActivatedEventArgs e)
         {
+#if (UseDI)
+            _logger.LogDebug("ViewActivated {view}", e.CurrentActiveView.Name);
+#endif
         }
 
         private void ApplicationClosing(object sender, ApplicationClosingEventArgs e)
         {
+#if (UseDI)
+            _logger.LogDebug("ApplicationClosing");
+#endif
         }
     }
 }

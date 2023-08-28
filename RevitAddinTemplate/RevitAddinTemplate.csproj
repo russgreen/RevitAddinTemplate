@@ -1,25 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
 	<PropertyGroup>
-		<Configurations>Debug R19;Debug R20;Debug R21;Debug R22;Debug R23</Configurations>
-		<Configurations>$(Configurations);Release R19;Release R20;Release R21;Release R22;Release R23</Configurations>
+		<Configurations>Debug R19;Debug R20;Debug R21;Debug R22;Debug R23;Debug R24</Configurations>
+		<Configurations>$(Configurations);Release R19;Release R20;Release R21;Release R22;Release R23;Release R24</Configurations>
 		<Platforms>x64</Platforms>
 		<Description>DescriptionContent</Description>
 		<Copyright>Copyright © CopyrightYear ProjectAuthor. All rights Reserved</Copyright>
 		<Version>0.0.1</Version>
 		<LangVersion>latest</LangVersion>
 		<NeutralLanguage>en</NeutralLanguage>
+		<!--#if (UseWPF) 
 		<UseWPF>true</UseWPF>
-		<UseWindowsForms>true</UseWindowsForms>
+		#endif-->
 	</PropertyGroup>
 
 	<PropertyGroup Condition="$(Configuration.Contains('Debug'))">
 		<DebugSymbols>true</DebugSymbols>
 		<DebugType>full</DebugType>
+		<DefineConstants>$(DefineConstants);DEBUG;UseWPF</DefineConstants>
 	</PropertyGroup>
 	<PropertyGroup Condition="$(Configuration.Contains('Release'))">
 		<Optimize>true</Optimize>
 		<DebugType>none</DebugType>
+		<DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="$(Configuration.Contains('R19'))">
@@ -44,11 +47,18 @@
 		<DefineConstants>$(DefineConstants);REVIT2022_OR_GREATER</DefineConstants>
 	</PropertyGroup>
 	<PropertyGroup Condition="$(Configuration.Contains('R23'))">
+		<TargetFramework>net48</TargetFramework>		
 		<RevitVersion>2023</RevitVersion>
 		<DefineConstants>$(DefineConstants);REVIT2023</DefineConstants>
-		<DefineConstants>$(DefineConstants);REVIT2023_OR_GREATER</DefineConstants>
+		<DefineConstants>$(DefineConstants);REVIT2022_OR_GREATER;REVIT2023_OR_GREATER</DefineConstants>
 	</PropertyGroup>
-
+	<PropertyGroup Condition="$(Configuration.Contains('R24'))">
+		<TargetFramework>net48</TargetFramework>		
+		<RevitVersion>2024</RevitVersion>
+		<DefineConstants>$(DefineConstants);REVIT2024</DefineConstants>
+		<DefineConstants>$(DefineConstants);REVIT2022_OR_GREATER;REVIT2023_OR_GREATER;REVIT2024_OR_GREATER</DefineConstants>
+	</PropertyGroup>
+	
 	<PropertyGroup>
 		<!-- Define handy symbols to use in the code in order to accommodate different Revit versions,
         e.g. by wrapping legacy / deprecated API calls with #if REVIT2014 | REVIT2015 -->
@@ -91,10 +101,22 @@
 	</ItemGroup>-->
 
 	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
+		<!--#if (UseWPF) 		
+		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />		
+		#endif-->
+		<!--#if (UseDI) 			
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
+		<PackageReference Include="Serilog.Extensions.Hosting" Version="7.0.0" />
+		<PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
+		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+		#endif-->		
 		<PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*" />
 		<PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*" />
-		<!--<PackageReference Include="Nice3point.Revit.Extensions" Version="$(RevitVersion).*"/>-->
+		<!--#if (UseDI) 
+		<PackageReference Include="Nice3point.Revit.Extensions" Version="$(RevitVersion).*"/>
+		<PackageReference Include="Nice3point.Revit.Toolkit" Version="$(RevitVersion).*"/>
+		#endif-->
 	</ItemGroup>
 
 	<ItemGroup>
@@ -104,19 +126,15 @@
 		<Reference Include="WindowsBase" />
 	</ItemGroup>
 
-	<!--
+	<!--#if (UseAnalytics)
   <ItemGroup>
     <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.4.0" />
     <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.4.0" />
   </ItemGroup>
-  -->
+  #endif-->
 
 	<ItemGroup>
 		<EmbeddedResource Include="Resources\RevitAddinTemplate_Button.png" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>

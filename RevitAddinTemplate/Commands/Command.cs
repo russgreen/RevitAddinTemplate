@@ -3,14 +3,26 @@ using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using System;
+using System.Runtime.InteropServices;
+#if (UseDI)
+using Microsoft.Extensions.Logging;
+#endif
 
-namespace RevitAddinTemplate
+namespace RevitAddinTemplate.Commands
 {
     [Transaction(TransactionMode.Manual)]
     public class Command : IExternalCommand
     {
+#if (UseDI)
+        private readonly ILogger<Command> _logger = Host.GetService<ILogger<Command>>();
+
+#endif
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
+#if (UseDI)
+            _logger.LogDebug("Command called");
+
+#endif
             if (commandData.Application.ActiveUIDocument.Document is null)
             {
                 throw new ArgumentException("activedoc");
@@ -38,12 +50,7 @@ namespace RevitAddinTemplate
 
 #if (UseWPF)
             var mainWindowView = new Views.MainView();
-            mainWindowView.ShowDialog();            
-#endif
-#if (!UseWPF)
-            //TODO: Remove reference to the Microsoft.Toolkit.MVVM package
-            var form = new Forms.MainForm(commandData);
-            form.ShowDialog(new WindowHandle(commandData.Application.MainWindowHandle));
+            mainWindowView.ShowDialog();
 #endif
 
             return Result.Succeeded;

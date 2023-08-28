@@ -1,6 +1,12 @@
 ﻿using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.UI;
+#if (UseDI)
+using Microsoft.Extensions.Logging;
+using Nice3point.Revit.Toolkit.External;
+#endif
 using Autodesk.Revit.UI.Events;
+using RevitAddinTemplate.Commands;
+using System;
 #if (UseAnalytics)
 //uncomment references to Microsoft.AppCenter.Analytics and Microsoft.AppCenter.Crashes in .csproj
 using Microsoft.AppCenter;
@@ -12,7 +18,11 @@ using System.Windows.Media.Imaging;
 
 namespace RevitAddinTemplate
 {
+#if (UseDI)
+    public class App : ExternalApplication
+#else
     public class App : IExternalApplication
+#endif
     {
         // get the absolute path of this assembly
         public static readonly string ExecutingAssemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
@@ -28,8 +38,15 @@ namespace RevitAddinTemplate
         private AppDocEvents _appEvents;
 #if (CreateNewRibbonTab)
         private readonly string _tabName = "RevitAddinTemplate";
+
 #endif
+#if (UseDI)
+        private ILogger<App> _logger;
+
+        public override void OnStartup()
+#else
         public Result OnStartup(UIControlledApplication application)
+#endif
         {
 #if (UseAnalytics)
             //start the application center monitoring - setup app on https://appcenter.ms/
@@ -42,21 +59,38 @@ namespace RevitAddinTemplate
             AppCenter.Start("<APPGUID>", typeof(Crashes));
 
 #endif
+#if (UseDI)
+            ThisApp = this; 
+            CachedUiCtrApp = Application;
+            CtrApp = Application.ControlledApplication;
+
+            Host.StartHost();
+
+            _logger = Host.GetService<ILogger<App>>();
+#else
             ThisApp = this; 
             CachedUiCtrApp = application;
             CtrApp = application.ControlledApplication;
+#endif
 
-            var panel = RibbonPanel(application);
+            var panel = RibbonPanel(CachedUiCtrApp);
 
             AddAppDocEvents();
 
+#if (!UseDI)
             return Result.Succeeded;
+#endif
         }
 
         public Result OnShutdown(UIControlledApplication application)
         {
             RemoveAppDocEvents();
 
+#if (UseDI)
+            Host.StopHost();
+            Serilog.Log.CloseAndFlush();
+
+#endif
             return Result.Succeeded;
         }
 
@@ -97,7 +131,7 @@ namespace RevitAddinTemplate
                     "Command", 
                     "Command", 
                     Assembly.GetExecutingAssembly().Location,
-                    $"{nameof(RevitAddinTemplate)}.{nameof(RevitAddinTemplate.Command)}"));
+                    $"{nameof(RevitAddinTemplate)}.{nameof(Command)}"));
             button.ToolTip = "Execute the RevitAddinTemplate command";
             button.LargeImage = PngImageSource("RevitAddinTemplate.Resources.RevitAddinTemplate_Button.png");
 
@@ -112,8 +146,11 @@ namespace RevitAddinTemplate
             {
                 imageSource = BitmapFrame.Create(stream);
             }
-            catch
+            catch(Exception ex)
             {
+#if (UseDI)
+                _logger.LogError(ex, "Error loading image from embedded resource");
+#endif
                 imageSource = null;
             }
 

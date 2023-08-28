@@ -58,7 +58,13 @@
     },
     "UseWPF": {
       "type": "parameter",
-      "description": "Use WPF or Winforms",
+      "description": "Use WPF Window",
+      "datatype": "bool",
+      "defaultValue": "true"
+    },
+    "UseDI": {
+      "type": "parameter",
+      "description": "Use dependacy injection",
       "datatype": "bool",
       "defaultValue": "false"
     }
@@ -75,12 +81,12 @@
           ]
         },
         {
-          "condition": "(UseWPF)",
+          "condition": "(!UseDI)",
           "exclude": [
-            "WindowHandle.cs",
-            "MainForm.cs",
-            "MainForm.Designer.cs",
-            "MainForm.resx"
+            "Models/Model.cs",
+            "Services/IService.cs",
+            "Services/Service.cs",
+            "Host.cs"
           ]
         }
       ]
