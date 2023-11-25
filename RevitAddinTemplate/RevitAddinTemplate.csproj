@@ -14,6 +14,10 @@
 		#endif-->
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<LegacyFrameworks>|net47|net471|net48|</LegacyFrameworks>
+	</PropertyGroup>
+
 	<PropertyGroup Condition="$(Configuration.Contains('Debug'))">
 		<DebugSymbols>true</DebugSymbols>
 		<DebugType>full</DebugType>
@@ -58,6 +62,12 @@
 		<DefineConstants>$(DefineConstants);REVIT2024</DefineConstants>
 		<DefineConstants>$(DefineConstants);REVIT2022_OR_GREATER;REVIT2023_OR_GREATER;REVIT2024_OR_GREATER</DefineConstants>
 	</PropertyGroup>
+	<PropertyGroup Condition="$(Configuration.Contains('R25'))">
+		<TargetFramework>net7.0-windows</TargetFramework>
+		<RevitVersion>2025</RevitVersion>
+		<DefineConstants>$(DefineConstants);REVIT2025</DefineConstants>
+		<DefineConstants>$(DefineConstants);REVIT2022_OR_GREATER;REVIT2023_OR_GREATER;REVIT2024_OR_GREATER;REVIT2025_OR_GREATER</DefineConstants>
+	</PropertyGroup>
 	
 	<PropertyGroup>
 		<!-- Define handy symbols to use in the code in order to accommodate different Revit versions,
@@ -74,7 +84,7 @@
 	</PropertyGroup>
 	
 	<!--<PropertyGroup>
-		<Path_DLL_API>..\..\RevitAPI\</Path_DLL_API>
+		<Path_DLL_API>..\..\MyRevitAPI\</Path_DLL_API>
 	</PropertyGroup>	
 
 	<ItemGroup>
@@ -119,7 +129,7 @@
 		#endif-->
 	</ItemGroup>
 
-	<ItemGroup>
+	<ItemGroup Condition="$(LegacyFrameworks.Contains('|$(TargetFramework)|'))">
 		<Reference Include="PresentationCore" />
 		<Reference Include="PresentationFramework" />
 		<Reference Include="System.Printing" />
