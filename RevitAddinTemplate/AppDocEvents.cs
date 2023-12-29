@@ -13,11 +13,11 @@ namespace RevitAddinTemplate
     {
 
 #if(UseDI)
-        private readonly ILogger<AppDocEvents> _logger;
+        private ILogger<AppDocEvents> _logger;
 
-        public AppDocEvents(ILogger<AppDocEvents> logger)
+        public AppDocEvents()
         {
-            _logger = logger;
+             _logger = Host.GetService<ILogger<AppDocEvents>>();
         }
 #else
         public AppDocEvents()
