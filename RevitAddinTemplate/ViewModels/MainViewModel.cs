@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace RevitAddinTemplate.ViewModels
 {
-    internal partial class MainViewModel : ObservableValidator 
+    internal partial class MainViewModel : BaseViewModel
     {
         public string WindowTitle { get; private set; }
 

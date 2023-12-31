@@ -10,12 +10,17 @@ namespace RevitAddinTemplate.Views
     /// </summary>
     public partial class MainView : Window
     {
+        private readonly ViewModels.MainViewModel _viewModel;
+
         public MainView()
         {
             InitializeComponent();
 
-            var viewModel = new MainViewModel();
-            this.DataContext = viewModel;
+            //var viewModel = new MainViewModel();
+            //this.DataContext = viewModel;
+
+            _viewModel = (ViewModels.MainViewModel)this.DataContext;
+            _viewModel.ClosingRequest += (sender, e) => this.Close();
 
         }
 

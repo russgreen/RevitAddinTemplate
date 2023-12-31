@@ -29,7 +29,7 @@ The project uses Nice3Point libraries to access the Revit SDK libraries.  Altern
  ┣ 📂RevitAddinTemplate
  ┃ ┣ 📂RevitAddinTemplate
  ┃ ┗ 📜RevitAddinTemplate.sln
- ┣ 📂RevitAPI
+ ┣ 📂MyRevitAPI
  ┃ ┣ 📂2018
  ┃ ┃ ┗ 📜SDK DLLs
  ┃ ┣ 📂2019
