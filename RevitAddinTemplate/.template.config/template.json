@@ -50,12 +50,6 @@
       "datatype": "bool",
       "defaultValue": "true"
     },
-    "UseAnalytics": {
-      "type": "parameter",
-      "description": "Use Microsoft App Center Analytics",
-      "datatype": "bool",
-      "defaultValue": "false"
-    },
     "UseWPF": {
       "type": "parameter",
       "description": "Use WPF Window",

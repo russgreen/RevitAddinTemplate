@@ -7,12 +7,6 @@ using Nice3point.Revit.Toolkit.External;
 using Autodesk.Revit.UI.Events;
 using RevitAddinTemplate.Commands;
 using System;
-#if (UseAnalytics)
-//uncomment references to Microsoft.AppCenter.Analytics and Microsoft.AppCenter.Crashes in .csproj
-using Microsoft.AppCenter;
-using Microsoft.AppCenter.Analytics;
-using Microsoft.AppCenter.Crashes;
-#endif
 using System.Reflection;
 using System.Windows.Media.Imaging;
 
@@ -48,17 +42,6 @@ namespace RevitAddinTemplate
         public Result OnStartup(UIControlledApplication application)
 #endif
         {
-#if (UseAnalytics)
-            //start the application center monitoring - setup app on https://appcenter.ms/
-            AppCenter.LogLevel = LogLevel.Verbose;
-            System.Windows.Forms.Application.ThreadException += (sender, args) =>
-            {
-                Crashes.TrackError(args.Exception);
-            };
-
-            AppCenter.Start("<APPGUID>", typeof(Crashes));
-
-#endif
 #if (UseDI)
             ThisApp = this; 
             CachedUiCtrApp = Application;

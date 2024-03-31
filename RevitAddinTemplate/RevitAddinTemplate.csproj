@@ -6,6 +6,9 @@
 		<Description>DescriptionContent</Description>
 		<Copyright>Copyright © CopyrightYear ProjectAuthor. All rights Reserved</Copyright>
 		<Version>0.0.1</Version>
+		<!--#if (UseWPF) 
+		<UseWPF>true</UseWPF>
+		#endif-->
 		<LangVersion>latest</LangVersion>
 		<NeutralLanguage>en</NeutralLanguage>
 		<Platforms>x64</Platforms>
@@ -13,9 +16,11 @@
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
-		<!--#if (UseWPF) 
-		<UseWPF>true</UseWPF>
-		#endif-->
+		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+
+		<!-- Copy dependacies to output folder on build -->
+		<!--<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>-->
+		<EnableDynamicLoading>true</EnableDynamicLoading>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="$(Configuration.Contains('Debug'))">
@@ -73,46 +78,8 @@
 		<!-- Define handy symbols to use in the code in order to accommodate different Revit versions,
         e.g. by wrapping legacy / deprecated API calls with #if REVIT2014 | REVIT2015 -->
 		<PreprocessorDefinitions>$(DefineConstants)</PreprocessorDefinitions>
-
-		<!-- Multiple targets can cause obj folder locking by concurrent builds -->
-		<BuildInParallel>false</BuildInParallel>
-
-		<!-- Override 'OutputPath'  -->
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<!-- <OutputPath>bin\$(Configuration)</OutputPath> -->
-		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-
-		<!-- Copy dependacies to output folder on build -->
-		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-	</PropertyGroup>
+    </PropertyGroup>
 	
-	<!--<PropertyGroup>
-		<Path_DLL_API>..\..\MyRevitAPI\</Path_DLL_API>
-	</PropertyGroup>	
-
-	<ItemGroup>
-		<Reference Include="RevitAPI">
-			<HintPath>$(Path_DLL_API)\$(RevitVersion)\RevitAPI.dll</HintPath>
-			<EmbedInteropTypes>false</EmbedInteropTypes>
-			<Private>false</Private>
-		</Reference>
-		<Reference Include="RevitAPIUI">
-			<HintPath>$(Path_DLL_API)\$(RevitVersion)\RevitAPIUI.dll</HintPath>
-			<EmbedInteropTypes>false</EmbedInteropTypes>
-			<Private>false</Private>
-		</Reference>	
-    <Reference Include="AdWindows">
-			<HintPath>$(Path_DLL_API)\$(RevitVersion)\AdWindows.dll</HintPath>
-			<EmbedInteropTypes>false</EmbedInteropTypes>
-			<Private>false</Private>
-		</Reference>
-		<Reference Include="UIFramework">
-		  <HintPath>$(Path_DLL_API)\$(RevitVersion)\UIFramework.dll</HintPath>
-		  <EmbedInteropTypes>false</EmbedInteropTypes>
-		  <Private>false</Private>
-		</Reference>
-	</ItemGroup>-->
-
 	<ItemGroup>
 		<!--#if (UseWPF) 		
 		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
@@ -131,13 +98,6 @@
 		<PackageReference Include="Nice3point.Revit.Toolkit" Version="$(RevitVersion).*"/>
 		#endif-->
 	</ItemGroup>
-
-	<!--#if (UseAnalytics)
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.4.0" />
-    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.4.0" />
-  </ItemGroup>
-  #endif-->
 
 	<ItemGroup>
 		<EmbeddedResource Include="Resources\RevitAddinTemplate_Button.png" />
