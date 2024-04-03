@@ -1,9 +1,6 @@
 ﻿# My Revit addin project template
-
-![Revit Version](https://img.shields.io/badge/Revit%20Version-2019_--_2025-blue.svg)
-![Platform](https://img.shields.io/badge/Platform-Windows-blue.svg)
-![.NET](https://img.shields.io/badge/.NET-4.7_--_8-blue.svg)
-[![License](http://img.shields.io/:License-MIT-blue.svg)](http://opensource.org/licenses/MIT)
+![Revit Version](https://img.shields.io/badge/Revit%20Version-2019_--_2024-blue.svg) ![.NET](https://img.shields.io/badge/.NET-4.7.1_--_4.8-blue.svg) <br>
+![Revit Version](https://img.shields.io/badge/Revit%20Version-2025-blue.svg) ![.NET](https://img.shields.io/badge/.NET-8-blue.svg)
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/russgreen/RevitAddinTemplate)
 
