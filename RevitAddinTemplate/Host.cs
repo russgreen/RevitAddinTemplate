@@ -58,6 +58,6 @@ internal static class Host
 
     public static T GetService<T>() where T : class
     {
-        return _host.Services.GetService(typeof(T)) as T;
+        return _host.Services.GetRequiredService<T>();
     }
 }

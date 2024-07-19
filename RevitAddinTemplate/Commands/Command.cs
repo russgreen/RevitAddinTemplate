@@ -6,23 +6,35 @@ using System;
 using System.Runtime.InteropServices;
 #if (UseDI)
 using Microsoft.Extensions.Logging;
+using Nice3point.Revit.Toolkit.External;
 #endif
 
 namespace RevitAddinTemplate.Commands
 {
     [Transaction(TransactionMode.Manual)]
-    public class Command : IExternalCommand
-    {
-#if (UseDI)
-        private readonly ILogger<Command> _logger = Host.GetService<ILogger<Command>>();
 
-#endif
-        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
-        {
 #if (UseDI)
+    public class Command : ExternalCommand
+    {
+        private ILogger<Command> _logger;
+
+        public override void Execute()
+        {
+
+            _logger = Host.GetService<ILogger<Command>>();
+
             _logger.LogDebug("Command called");
 
-#endif
+            App.RevitDocument = Context.UiDocument.Document;
+            App.CachedUiApp = Context.UiApplication;
+
+#else
+    public class Command : IExternalCommand
+    {
+
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+        { 
+
             if (commandData.Application.ActiveUIDocument.Document is null)
             {
                 throw new ArgumentException("activedoc");
@@ -31,6 +43,8 @@ namespace RevitAddinTemplate.Commands
             {
                 App.RevitDocument = commandData.Application.ActiveUIDocument.Document;
             }
+#endif
+
 
 #if REVIT2020 || REVIT2021 || REVIT2022
 #else
