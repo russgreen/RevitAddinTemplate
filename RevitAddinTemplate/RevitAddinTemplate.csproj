@@ -22,11 +22,6 @@
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
 
-	<PropertyGroup>
-		<!--<IsRepackable>true</IsRepackable>-->
-		<!--<RepackBinariesExcludes>$(AssemblyName).UI.dll;System*.dll</RepackBinariesExcludes>-->
-	</PropertyGroup>
-
 	<PropertyGroup Condition="$(Configuration.Contains('Debug'))">
 		<DebugSymbols>true</DebugSymbols>
 		<DebugType>full</DebugType>
@@ -83,6 +78,11 @@
         e.g. by wrapping legacy / deprecated API calls with #if REVIT2014 | REVIT2015 -->
 		<PreprocessorDefinitions>$(DefineConstants)</PreprocessorDefinitions>
     </PropertyGroup>
+
+	<PropertyGroup>
+		<!--<IsRepackable Condition="$(Configuration.Contains('Release'))">true</IsRepackable>-->
+		<!--<RepackBinariesExcludes>$(AssemblyName).UI.dll;System*.dll</RepackBinariesExcludes>-->
+	</PropertyGroup>
 	
 	<ItemGroup>
 		<PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*-*" />
