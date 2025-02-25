@@ -25,7 +25,7 @@ namespace RevitAddinTemplate.Commands
 
             _logger.LogDebug("Command called");
 
-            App.RevitDocument = Context.UiDocument.Document;
+            App.RevitDocument = Context.ActiveUiDocument.Document;
             App.CachedUiApp = Context.UiApplication;
 
 #else
@@ -67,7 +67,9 @@ namespace RevitAddinTemplate.Commands
             mainWindowView.ShowDialog();
 #endif
 
+#if !(UseDI)
             return Result.Succeeded;
+#endif
         }
 
 

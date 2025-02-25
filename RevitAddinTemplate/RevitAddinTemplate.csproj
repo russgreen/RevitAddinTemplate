@@ -22,6 +22,11 @@
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<!--<IsRepackable>true</IsRepackable>-->
+		<!--<RepackBinariesExcludes>$(AssemblyName).UI.dll;System*.dll</RepackBinariesExcludes>-->
+	</PropertyGroup>
+
 	<PropertyGroup Condition="$(Configuration.Contains('Debug'))">
 		<DebugSymbols>true</DebugSymbols>
 		<DebugType>full</DebugType>
@@ -80,88 +85,36 @@
     </PropertyGroup>
 	
 	<ItemGroup>
+		<PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*-*" />
+		<PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*-*" />	
+		<!--#if (UseDI) 
+		<PackageReference Include="Nice3point.Revit.Extensions" Version="$(RevitVersion).*-*"/>
+		<PackageReference Include="Nice3point.Revit.Toolkit" Version="$(RevitVersion).*-*"/>
+		#endif-->		
+		
 		<!--#if (UseWPF) 		
 		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />		
 		#endif-->
+		
 		<!--#if (UseDI) 			
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
-		<PackageReference Include="Serilog.Extensions.Hosting" Version="7.0.0" />
-		<PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
-		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-		#endif-->		
-		<PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*-*" />
-		<PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*-*" />
-		<!--#if (UseDI) 
-		<PackageReference Include="Nice3point.Revit.Extensions" Version="$(RevitVersion).*-*"/>
-		<PackageReference Include="Nice3point.Revit.Toolkit" Version="$(RevitVersion).*-*"/>
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.*" Condition="'$(TargetFramework)' == 'net48'" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
+
+		<PackageReference Include="Serilog.Extensions.Hosting" Version="7.*" Condition="'$(TargetFramework)' == 'net48'" />
+		<PackageReference Include="Serilog.Sinks.Debug" Version="2.*" Condition="'$(TargetFramework)' == 'net48'" />
+		<PackageReference Include="Serilog.Sinks.File" Version="5.*" Condition="'$(TargetFramework)' == 'net48'" />
+
+		<PackageReference Include="Serilog.Extensions.Hosting" Version="8.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
+		<PackageReference Include="Serilog.Sinks.Debug" Version="3.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
+		<PackageReference Include="Serilog.Sinks.File" Version="6.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
 		#endif-->
+
+		<PackageVersion Include="ILRepack" Version="2.0.39" ExcludeAssets="Runtime"/>
 	</ItemGroup>
 
 	<ItemGroup>
 		<EmbeddedResource Include="Resources\RevitAddinTemplate_Button.png" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<None Update="RevitAddinTemplate.addin">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
-
-	<!-- Build debug manifest at build time -->
-	<Target Name="CreateAddinManifest" AfterTargets="AfterBuild">
-		<ItemGroup>
-			<AddinManifest Include="$(AppData)\Autodesk\REVIT\Addins\$(RevitVersion)\RevitAddinTemplate.addin" />
-		</ItemGroup>
-		<ReplaceFileText InputFilename="RevitAddinTemplate.addin" OutputFilename="@(AddinManifest)" MatchExpression="Assembly&gt;(.*?)&lt;" ReplacementText="Assembly&gt;$(TargetDir)$(AssemblyName).dll&lt;" />
-		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;VendorId&gt;(.*?)&lt;" ReplacementText="&lt;VendorId&gt;$(PackageId)&lt;" />
-		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;FullClassName&gt;(.*?)&lt;" ReplacementText="&lt;FullClassName&gt;$(RootNamespace).App&lt;" />
-	</Target>
-	
-	<!-- Clean up debug manifest -->
-	<Target Name="CleanupAddinManifest" AfterTargets="AfterClean">
-		<Delete Files="$(AppData)\Autodesk\REVIT\Addins\$(RevitVersion)\RevitAddinTemplate.addin" />
-	</Target>
-
-	<UsingTask Condition="'$(MSBuildRuntimeType)' == 'Full'" TaskName="ReplaceFileText" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
-		<ParameterGroup>
-			<InputFilename ParameterType="System.String" Required="true" />
-			<OutputFilename ParameterType="System.String" Required="true" />
-			<MatchExpression ParameterType="System.String" Required="true" />
-			<ReplacementText ParameterType="System.String" Required="true" />
-		</ParameterGroup>
-		<Task>
-			<Reference Include="System.Core" />
-			<Using Namespace="System" />
-			<Using Namespace="System.IO" />
-			<Using Namespace="System.Text.RegularExpressions" />
-			<Code Type="Fragment" Language="cs">
-				<![CDATA[
-              File.WriteAllText(OutputFilename,Regex.Replace(File.ReadAllText(InputFilename),MatchExpression,ReplacementText));
-        ]]>
-			</Code>
-		</Task>
-	</UsingTask>
-
-	<UsingTask Condition="'$(MSBuildRuntimeType)' == 'Core'" TaskName="ReplaceFileText" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
-		<ParameterGroup>
-			<InputFilename ParameterType="System.String" Required="true" />
-			<OutputFilename ParameterType="System.String" Required="true" />
-			<MatchExpression ParameterType="System.String" Required="true" />
-			<ReplacementText ParameterType="System.String" Required="true" />
-		</ParameterGroup>
-		<Task>
-			<Using Namespace="System" />
-			<Using Namespace="System.IO" />
-			<Using Namespace="System.Text.RegularExpressions" />
-			<Code Type="Fragment" Language="cs">
-				<![CDATA[
-              File.WriteAllText(OutputFilename,Regex.Replace(File.ReadAllText(InputFilename),MatchExpression,ReplacementText));
-        ]]>
-			</Code>
-		</Task>
-	</UsingTask>
-
-
 
 </Project>
