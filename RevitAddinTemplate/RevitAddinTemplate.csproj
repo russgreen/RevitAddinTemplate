@@ -80,8 +80,8 @@
     </PropertyGroup>
 
 	<PropertyGroup>
-		<!--<IsRepackable Condition="$(Configuration.Contains('Release'))">true</IsRepackable>-->
-		<!--<RepackBinariesExcludes>$(AssemblyName).UI.dll;System*.dll</RepackBinariesExcludes>-->
+		<!--<IsRepackable Condition="$(Configuration.Contains('Release')) And '$(RevitVersion)' &lt; '2026'">true</IsRepackable>
+		<RepackBinariesExcludes>$(AssemblyName).UI.dll;System*.dll</RepackBinariesExcludes>-->
 	</PropertyGroup>
 	
 	<ItemGroup>
@@ -110,7 +110,8 @@
 		<PackageReference Include="Serilog.Sinks.File" Version="6.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
 		#endif-->
 
-		<PackageVersion Include="ILRepack" Version="2.0.39" ExcludeAssets="Runtime"/>
+		<!--Repacking
+		<PackageVersion Include="ILRepack" Version="2.0.39" ExcludeAssets="Runtime"/>-->
 	</ItemGroup>
 
 	<ItemGroup>
