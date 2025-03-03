@@ -32,6 +32,15 @@
 		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;FullClassName&gt;(.*?)&lt;" ReplacementText="&lt;FullClassName&gt;$(RootNamespace).App&lt;" />
 	</Target>
 
+	<Target Name="CreateAddinManifestIsolated" AfterTargets="AfterBuild" Condition="$(Configuration.Contains('Debug')) And $(DefineConstants.Contains('REVIT2026_OR_GREATER'))">
+		<ItemGroup>
+			<AddinManifest Include="$(AppData)\Autodesk\REVIT\Addins\$(RevitVersion)\$(AssemblyName).addin" />
+		</ItemGroup>
+		<ReplaceFileText InputFilename="$(AssemblyName)_Isolated.addin" OutputFilename="@(AddinManifest)" MatchExpression="Assembly&gt;(.*?)&lt;" ReplacementText="Assembly&gt;$(TargetDir)$(AssemblyName).dll&lt;" />
+		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;VendorId&gt;(.*?)&lt;" ReplacementText="&lt;VendorId&gt;$(PackageId)&lt;" />
+		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;FullClassName&gt;(.*?)&lt;" ReplacementText="&lt;FullClassName&gt;$(RootNamespace).App&lt;" />
+	</Target>
+
 	<!-- Clean up debug manifest -->
 	<Target Name="CleanupAddinManifest" AfterTargets="AfterClean">
 		<Delete Files="$(AppData)\Autodesk\REVIT\Addins\$(RevitVersion)\$(AssemblyName).addin" />
